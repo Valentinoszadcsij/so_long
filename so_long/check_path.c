@@ -6,7 +6,7 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 19:25:00 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/13 20:25:57 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/02/14 00:48:03 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,23 @@ void	map_cpy(t_map *map)
 	map->map_cpy->x = map->x;
 	map->map_cpy->y = map->y;
 	map->map_cpy->cnt_c = map->cnt_c;
+	map->map_cpy->vis = 50;
 }
 
 bool	dfs(t_map_cpy *map)
 {
-	if (map->map[map->p_y][map->p_x] == 'E')
+	if(map->map[map->p_y][map->p_x] == 'C')
+	{
+		map->vis++;
+		map->cnt_c--;
+	}
+	if(map->cnt_c == 0 && map->map[map->p_y][map->p_x] == 'E')
 		return (true);
-	map->map[map->p_y][map->p_x] = '2';
-	if (map->map[map->p_y][map->p_x+1] != '1' && map->map[map->p_y][map->p_x+1] != '2')
+	else if(map->map[map->p_y][map->p_x] == 'E')
+		map->map[map->p_y][map->p_x] = 'E';
+	else
+		map->map[map->p_y][map->p_x] = map->vis;
+	if (map->map[map->p_y][map->p_x+1] != '1' && map->map[map->p_y][map->p_x+1] != map->vis)
 	{
 		map->p_x = map->p_x+1;
 		printf("x:%d, y:%d\n", map->p_x, map->p_y);
@@ -45,7 +54,7 @@ bool	dfs(t_map_cpy *map)
 			return (true);
 		map->p_x = map->p_x-1;
 	}
-	if (map->map[map->p_y+1][map->p_x] != '1' && map->map[map->p_y+1][map->p_x] != '2')
+	if (map->map[map->p_y+1][map->p_x] != '1' && map->map[map->p_y+1][map->p_x] != map->vis)
 	{
 		map->p_y = map->p_y+1;
 		printf("x:%d, y:%d\n", map->p_x, map->p_y);
@@ -53,7 +62,7 @@ bool	dfs(t_map_cpy *map)
 			return (true);
 		map->p_y = map->p_y-1;
 	}
-	if (map->map[map->p_y][map->p_x-1] != '1' && map->map[map->p_y][map->p_x-1] != '2')
+	if (map->map[map->p_y][map->p_x-1] != '1' && map->map[map->p_y][map->p_x-1] != map->vis)
 	{
 		map->p_x = map->p_x-1;
 		printf("x:%d, y:%d\n", map->p_x, map->p_y);
@@ -61,7 +70,7 @@ bool	dfs(t_map_cpy *map)
 			return (true);
 		map->p_x = map->p_x+1;
 	}
-	if (map->map[map->p_y-1][map->p_x] != '1' && map->map[map->p_y-1][map->p_x] != '2')
+	if (map->map[map->p_y-1][map->p_x] != '1' && map->map[map->p_y-1][map->p_x] != map->vis)
 	{
 		map->p_y = map->p_y-1;
 		printf("x:%d, y:%d\n", map->p_x, map->p_y);
