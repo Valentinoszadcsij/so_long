@@ -6,7 +6,7 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 03:33:20 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/13 19:35:51 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:49:29 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	check_walls(t_map *map)
 	{
 		if (map->map_arr[0][i] != '1' || map->map_arr[map->y - 1][i] != '1')
 		{
-			printf(RED "||ERROR1:\nMap has to be surrounded by wall (1)||\n");
+			ft_printf("ERROR:\nMap has to be surrounded by wall (1)\n");
 			return (0);
 		}
 		i++;
@@ -60,7 +60,7 @@ int	check_walls(t_map *map)
 	{
 		if (map->map_arr[i][0] != '1' || map->map_arr[i][map->x - 1] != '1')
 		{
-			printf(RED "||ERROR2:\nMap has to be surrounded by wall (1)||\n");
+			ft_printf("ERROR:\nMap has to be surrounded by wall (1)||\n");
 			return (0);
 		}
 		i++;
@@ -85,7 +85,7 @@ int	check_chars(t_map *map)
 		{	
 			if (ft_strchr(symbols, map->map_arr[i][j]) == NULL)
 			{
-				printf(RED "||ERROR:\nWrong symbol(s) in map file||\n");
+				ft_printf("ERROR:\nWrong symbol(s) in map file\n");
 				return (0);
 			}
 			j++;
@@ -98,20 +98,18 @@ int	check_chars(t_map *map)
 
 int	map_check(t_map *map)
 {
-	printf("%d -> x\n", map->x);
 	if (check_chars(map) == 0 || check_walls(map) == 0)
 		return (0);
 	else if (check_cnt(map) == 0)
 	{
-		printf(RED "||ERROR:\nCheck the game objects count||\n");
+		ft_printf("ERROR:\nCheck the game objects count\n");
 		return (0);
 	}
 	else if (check_path(map) == 0)
 	{
-		printf(RED "||ERROR\nThere is no valid path||\n");
+		ft_printf("ERROR\nThere is no valid path\n");
 		return (0);
 	}
 	else
 		return (1);
 }
-// || check_cnt(map) == 0

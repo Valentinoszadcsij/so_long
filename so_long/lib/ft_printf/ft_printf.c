@@ -1,32 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 06:00:32 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/03/25 20:15:25 by voszadcs         ###   ########.fr       */
+/*   Created: 2022/12/07 16:43:31 by voszadcs          #+#    #+#             */
+/*   Updated: 2022/12/12 08:11:02 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../so_long.h"
+#include <stdlib.h>
+#include "ft_printf.h"
+#include <stdio.h>
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_printf(const char *s, ...)
 {
-	size_t	i;
+	va_list	args;
+	int		i;
+	int		print_length;
 
+	va_start(args, s);
 	i = 0;
-	while (i < n)
+	print_length = 0;
+	while (s[i] != '\0')
 	{
-		if (s1[i] == s2[i])
+		if (s[i] != '%')
+			write_char(s[i]);
+		else if (s[i] == '%')
 		{
-			if (s1[i] == 0 || s2[i] == 0)
-				return (0);
 			i++;
+			print_length += specifier(s[i], args) - 2;
 		}
-		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	return (0);
+	va_end(args);
+	return (i + print_length);
 }

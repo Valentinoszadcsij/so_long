@@ -1,32 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   write_char.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 06:00:32 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/03/25 20:15:25 by voszadcs         ###   ########.fr       */
+/*   Created: 2022/12/10 10:11:46 by voszadcs          #+#    #+#             */
+/*   Updated: 2022/12/12 08:04:49 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	write_char(char c)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		if (s1[i] == s2[i])
-		{
-			if (s1[i] == 0 || s2[i] == 0)
-				return (0);
-			i++;
-		}
-		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-	}
-	return (0);
+	write(1, &c, 1);
+	return (1);
 }

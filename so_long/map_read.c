@@ -6,7 +6,7 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 08:53:51 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/13 16:32:39 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:50:03 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 int	check_cols(t_map *map, int i)
 {
 	map->x = (int)ft_strlen(map->map_arr[i]);
-	if (map->x < 5)
+	if (map->x < 4)
 	{
-		printf(RED "||ERROR:\nMap has less than 5 columns||\n");
+		ft_printf("ERROR:\nMap has less than 4 columns\n");
 		return (0);
 	}
 	else if (map->x != (int)ft_strlen(map->map_arr[i - 1]))
 	{
 		if (i == map->y - 1 && !ft_strchr(map->map_arr[i], '\n'))
 			return (1);
-		printf(RED "||ERROR:\nMap lines length doesn't match||\n");
+		ft_printf("||ERROR:\nMap lines length doesn't match\n");
 		return (0);
 	}
 	else
@@ -39,7 +39,7 @@ int	save_arr(t_map *map)
 	map->map_arr = malloc(sizeof(void *) * (map->y));
 	if (!map->map_arr)
 	{
-		printf(RED "||Error:\nFailed to malloc map_arr||\n");
+		ft_printf("Error:\nFailed to malloc map_arr\n");
 		return (0);
 	}
 	map->fd = open(map->path, O_RDONLY);
@@ -48,7 +48,7 @@ int	save_arr(t_map *map)
 	while (i < map->y)
 	{
 		map->map_arr[i] = get_next_line(map->fd);
-		printf(CYN "line %d: %s\n", i, map->map_arr[i]);
+		ft_printf("line %d: %s\n", i, map->map_arr[i]);
 		if (i >= 1)
 		{	
 			if (check_cols(map, i) == 0)
@@ -78,7 +78,7 @@ int	map_parse(t_map *map)
 	close(map->fd);
 	if (map->y < 3)
 	{
-		printf(RED "||ERROR:\nMap cannot have less than 3 lines||\n");
+		ft_printf("ERROR:\nMap cannot have less than 3 lines\n");
 		return (0);
 	}
 	else if (save_arr(map) == 1)
@@ -92,17 +92,17 @@ int	map_read(t_game *param)
 	param->map->fd = open(param->map->path, O_RDONLY);
 	if (param->map->fd < 0)
 	{
-		printf(RED "||ERROR:\nFailed to open map file||\n");
+		ft_printf("ERROR:\nFailed to open map file\n");
 		return (0);
 	}
 	else if (map_parse(param->map) == 1)
 	{
-		printf(GRN "||Map parse: SUCCESS||\n");
+		ft_printf("Map parse: SUCCESS\n");
 		return (1);
 	}
 	else
 	{
-		printf(RED "||ERROR:\nFailed to parse map||\n");
+		ft_printf("ERROR:\nFailed to parse map\n");
 		return (0);
 	}
 }

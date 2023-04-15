@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   write_nbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 06:00:32 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/03/25 20:15:25 by voszadcs         ###   ########.fr       */
+/*   Created: 2022/12/10 10:05:27 by voszadcs          #+#    #+#             */
+/*   Updated: 2022/12/12 08:04:54 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	write_nbr(int n)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
+	if (n < 0)
 	{
-		if (s1[i] == s2[i])
-		{
-			if (s1[i] == 0 || s2[i] == 0)
-				return (0);
-			i++;
-		}
-		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		write(1, "-", 1);
+		if (n == -2147483648)
+			return (write_string("2147483648") + 1);
+		n = n * -1;
+		return (write_nbr(n) + 1);
 	}
-	return (0);
+	if (n >= 10)
+		return (write_nbr(n / 10) + write_nbr(n % 10));
+	else
+	{
+		if (n >= 0)
+			write_char(n + 48);
+	}
+	return (1);
 }

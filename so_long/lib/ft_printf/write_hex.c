@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   write_hex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 06:00:32 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/03/25 20:15:25 by voszadcs         ###   ########.fr       */
+/*   Created: 2022/12/12 06:00:23 by voszadcs          #+#    #+#             */
+/*   Updated: 2022/12/12 08:04:52 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	print_hex(unsigned int n, char c)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
+	if (n >= 16)
+		return (print_hex(n / 16, c) + print_hex(n % 16, c));
+	else
 	{
-		if (s1[i] == s2[i])
-		{
-			if (s1[i] == 0 || s2[i] == 0)
-				return (0);
-			i++;
-		}
+		if (n <= 9)
+			write_char(n + 48);
+		else if (c == 'x')
+			write_char(n - 10 + 'a');
 		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+			write_char(n - 10 + 'A');
 	}
-	return (0);
+	return (1);
+}
+
+int	write_hex(unsigned int n, char c)
+{
+	return (print_hex(n, c));
 }

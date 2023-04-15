@@ -6,11 +6,13 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 19:25:00 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/14 00:48:03 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/03/21 12:32:08 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+bool	dfs(t_map_cpy *map);
 
 void	map_cpy(t_map *map)
 {
@@ -27,57 +29,43 @@ void	map_cpy(t_map *map)
 	}
 	map->map_cpy->p_x = map->p_x;
 	map->map_cpy->p_y = map->p_y;
-	map->map_cpy->x = map->x;
-	map->map_cpy->y = map->y;
 	map->map_cpy->cnt_c = map->cnt_c;
 	map->map_cpy->vis = 50;
 }
 
+bool	dfs_step(t_map_cpy *map, int x, int y)
+{
+	if ((map->map[map->p_y + y][map->p_x + x] != '1') \
+		&& (map->map[map->p_y + y][map->p_x + x] != map->vis))
+	{
+		map->p_x = map->p_x + x;
+		map->p_y = map->p_y + y;
+		if (dfs(map))
+			return (true);
+		map->p_x = map->p_x - x;
+		map->p_y = map->p_y - y;
+	}
+	return (false);
+}
+
 bool	dfs(t_map_cpy *map)
 {
-	if(map->map[map->p_y][map->p_x] == 'C')
+	if (map->map[map->p_y][map->p_x] == 'C')
 	{
 		map->vis++;
+		if (map->vis == 58)
+			map->vis = 50;
 		map->cnt_c--;
 	}
-	if(map->cnt_c == 0 && map->map[map->p_y][map->p_x] == 'E')
+	if (map->cnt_c == 0 && map->map[map->p_y][map->p_x] == 'E')
 		return (true);
-	else if(map->map[map->p_y][map->p_x] == 'E')
+	else if (map->map[map->p_y][map->p_x] == 'E')
 		map->map[map->p_y][map->p_x] = 'E';
 	else
 		map->map[map->p_y][map->p_x] = map->vis;
-	if (map->map[map->p_y][map->p_x+1] != '1' && map->map[map->p_y][map->p_x+1] != map->vis)
-	{
-		map->p_x = map->p_x+1;
-		printf("x:%d, y:%d\n", map->p_x, map->p_y);
-		if (dfs(map))
-			return (true);
-		map->p_x = map->p_x-1;
-	}
-	if (map->map[map->p_y+1][map->p_x] != '1' && map->map[map->p_y+1][map->p_x] != map->vis)
-	{
-		map->p_y = map->p_y+1;
-		printf("x:%d, y:%d\n", map->p_x, map->p_y);
-		if (dfs(map))
-			return (true);
-		map->p_y = map->p_y-1;
-	}
-	if (map->map[map->p_y][map->p_x-1] != '1' && map->map[map->p_y][map->p_x-1] != map->vis)
-	{
-		map->p_x = map->p_x-1;
-		printf("x:%d, y:%d\n", map->p_x, map->p_y);
-		if (dfs(map))
-			return (true);
-		map->p_x = map->p_x+1;
-	}
-	if (map->map[map->p_y-1][map->p_x] != '1' && map->map[map->p_y-1][map->p_x] != map->vis)
-	{
-		map->p_y = map->p_y-1;
-		printf("x:%d, y:%d\n", map->p_x, map->p_y);
-		if (dfs(map))
-			return (true);
-		map->p_y = map->p_y+1;
-	}
+	if (dfs_step(map, 1, 0) || dfs_step(map, 0, 1) || \
+		dfs_step(map, -1, 0) || dfs_step(map, 0, -1))
+		return (true);
 	return (false);
 }
 
@@ -112,8 +100,14 @@ int	check_path(t_map *map)
 		j = 0;
 	}
 	map_cpy(map);
-	printf(MAG " p: %d, %d\n", map->p_x, map->p_y);
+	i = -1;
 	if (dfs(map->map_cpy) == true)
+	{
+		while (++i < map->y)
+			free (map->map_cpy->map[i]);
+		free(map->map_cpy->map);
+		free(map->map_cpy);
 		return (1);
+	}
 	return (0);
 }

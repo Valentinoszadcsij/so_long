@@ -6,7 +6,7 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 06:39:36 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/13 20:20:42 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/03/21 04:20:04 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ typedef struct s_map_cpy
 	char	**map;
 	int		p_x;
 	int		p_y;
-	int		x;
-	int		y;
 	int		cnt_c;
+	char	vis;
 }	t_map_cpy;
 
 typedef struct s_map
@@ -44,13 +43,26 @@ typedef struct s_map
 
 typedef struct s_player
 {
-	mlx_image_t		**imgs;
+	mlx_image_t		*img;
+	int				x;
+	int				y;
+	int				steps;
 }	t_player;
+
+typedef struct s_textures
+{
+	mlx_image_t	*wall;
+	mlx_image_t	*ground;
+	mlx_image_t	*sloth;
+	mlx_image_t	*door;
+}	t_textures;
 
 typedef struct s_game
 {
 	mlx_t			*mlx;
 	t_player		*player;
 	t_map			*map;
+	t_textures		*textures;
+	int				status;
 }	t_game;
 #endif

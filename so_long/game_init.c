@@ -6,48 +6,53 @@
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 23:32:09 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/02/13 20:02:09 by voszadcs         ###   ########.fr       */
+/*   Updated: 2023/03/25 21:24:49 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	map_init(t_game *param, char *path)
+int	map_init(t_game *param, char *path)
 {
-	char	ext[5];
+	char	*dot;
 
-	strcpy(ext, ".ber\0");
-	if (ft_strncmp(ext, ft_strchr(path, '.'), 4) != 0)
+	dot = ft_strchr(path, '.');
+	if (!dot)
+	{
+		ft_printf("ERROR:\nMap file extension is wrong:\n");
+		return (0);
+	}
+	if (ft_strncmp(".ber\0", dot, 4) != 0)
 	{	
-		printf(RED "||ERROR:\nMap file extension is wrong:||\n");
-		return ;
+		ft_printf("ERROR:\nMap file extension is wrong:\n");
+		return (0);
 	}	
 	param->map = malloc(sizeof(t_map));
 	param->map->path = path;
 	if (map_read(param) == 1)
-	{
 		param->map->map_valid = map_check(param->map);
-		for (int i = 0; i < 5; i++)
-		{
-			printf("%s", param->map->map_arr[i]);
-		}
-		printf("\n\n");
-		for (int i = 0; i < 5; i++)
-		{
-			printf("%s\n", param->map->map_cpy->map[i]);
-		}
-	}
 	if (param->map->map_valid == 1)
 	{
-		printf (GRN "||Map validation: SUCCESS||");
+		ft_printf ("Map validation: SUCCESS\n");
+		return (1);
 	}
+	return (0);
 }
 
-t_game	game_init(char *path)
+int	game_init(char *path)
 {
 	t_game	game;
 
-	game.mlx = mlx_init(WIDTH, HEIGHT, "SO LONG", true);
-	map_init(&game, path);
-	return (game);
+	if (map_init(&game, path) == 0)
+		return (EXIT_FAILURE);
+	game.mlx = mlx_init(game.map->x * 64, game.map->y * 64, "SO LONG", true);
+	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
+	map_render(&game);
+	player_init(&game);
+	mlx_key_hook(game.mlx, keys, &game);
+	mlx_loop_hook(game.mlx, main_loop, &game);
+	mlx_loop(game.mlx);
+	free_all(&game);
+	mlx_terminate(game.mlx);
+	return (EXIT_SUCCESS);
 }

@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   write_pointer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: voszadcs <voszadcs@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/22 06:00:32 by voszadcs          #+#    #+#             */
-/*   Updated: 2023/03/25 20:15:25 by voszadcs         ###   ########.fr       */
+/*   Created: 2022/12/11 06:48:10 by voszadcs          #+#    #+#             */
+/*   Updated: 2022/12/12 08:04:57 by voszadcs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../so_long.h"
+#include "ft_printf.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+static int	print_pointer(unsigned long long n)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
+	if (n >= 16)
+		return (print_pointer(n / 16) + print_pointer(n % 16));
+	else
 	{
-		if (s1[i] == s2[i])
-		{
-			if (s1[i] == 0 || s2[i] == 0)
-				return (0);
-			i++;
-		}
+		if (n <= 9)
+			write_char(n + 48);
 		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+			write_char(n - 10 + 'a');
 	}
-	return (0);
+	return (1);
+}
+
+int	write_pointer(unsigned long long n)
+{
+	return (write_string("0x") + print_pointer(n));
 }
